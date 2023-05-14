@@ -220,6 +220,8 @@ animations = [ {
 extents = Vector2( 12.5, 14.5 )
 
 [node name="Player" type="KinematicBody2D"]
+collision_layer = 3
+collision_mask = 3
 script = ExtResource( 5 )
 jump_height = 100.0
 jump_time_to_peak = 0.5
@@ -228,7 +230,7 @@ jump_time_to_descent = 0.4
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 12 )
 animation = "second_jump"
-frame = 1
+frame = 5
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

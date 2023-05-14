@@ -12,10 +12,12 @@ onready var jump_velocity : float = ((2.0 * jump_height) / jump_time_to_peak) * 
 onready var jump_gravity : float = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0
 onready var fall_gravity : float = ((-2.0 * jump_height) / (jump_time_to_descent * jump_time_to_descent)) * -1.0
 var second_jump = true
+var knockback_dir = Vector2()
+var knockback_wait = 10
+
 func _physics_process(delta):
 	velocity.y += get_gravity() * delta
 	velocity.x = get_input_velocity() * move_speed
-	
 	if Input.is_action_just_pressed("ui_up") and is_on_floor():
 		$AnimatedSprite.play("jump")
 		jump()
@@ -40,6 +42,8 @@ func _physics_process(delta):
 		for i in range(get_slide_count()):
 			if "Fruit" in get_slide_collision(i).collider.name:
 				touched(get_slide_collision(i).collider.name)
+			if "Enemy" in get_slide_collision(i).collider.name:
+				hurt(get_slide_collision(i).collider.name)
 	
 func touched(name):
 	var object  ="../{a}".format({"a":name})
@@ -47,7 +51,11 @@ func touched(name):
 	fruta.get_node("CollisionShape2D").disabled=true
 	fruta.get_node("AudioStreamPlayer2D").play()
 	fruta.hide()
-	
+
+func hurt(name):
+	$AnimatedSprite.play("hit")
+	$AudioStreamPlayer2D.play()
+
 func get_gravity() -> float:
 	return jump_gravity if velocity.y < 0.0 else fall_gravity
 
